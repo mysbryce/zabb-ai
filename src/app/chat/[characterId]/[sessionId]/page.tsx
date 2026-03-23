@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/Textarea'
 import { Avatar } from '@/components/ui/Avatar'
 import { MessageParser } from '@/components/MessageParser'
 import Link from 'next/link'
-import { ArrowLeft, Send, Sparkles, Wand2, Ghost } from 'lucide-react'
+import { ArrowLeft, Send, Sparkles, Wand2, Ghost, Loader2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function ChatPage({
@@ -26,19 +26,25 @@ export default function ChatPage({
   const settings = useZabbStore((state) => state.settings)
   const addMessageToSession = useZabbStore((state) => state.addMessageToSession)
 
-  const character = characters.find((c) => c.id === characterId)
-  const session = sessions[sessionId]
-
+  const [hasHydrated, setHasHydrated] = useState(false)
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
+  // Handle hydration
   useEffect(() => {
-    if (!character || !session) {
+    setHasHydrated(true)
+  }, [])
+
+  const character = characters.find((c) => c.id === characterId)
+  const session = sessions[sessionId]
+
+  useEffect(() => {
+    if (hasHydrated && (!character || !session)) {
       router.push('/')
     }
-  }, [character, session, router])
+  }, [hasHydrated, character, session, router])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -109,7 +115,13 @@ export default function ChatPage({
     }, 0)
   }
 
-  if (!character || !session) return null
+  if (!hasHydrated || !character || !session) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-zabb-bg">
+        <Loader2 className="h-8 w-8 animate-spin text-white/20" />
+      </div>
+    )
+  }
 
   return (
     <main className="flex flex-col h-screen max-w-5xl mx-auto font-sarabun bg-zabb-bg relative">
@@ -124,7 +136,7 @@ export default function ChatPage({
         className="flex items-center gap-4 p-5 border-b border-zabb-border/60 bg-zabb-bg/80 backdrop-blur-xl sticky top-0 z-10 shrink-0"
       >
         <Link href="/">
-          <Button variant="ghost" size="sm" className="px-2 hover:bg-white/5">
+          <Button variant="ghost" size="sm" className="px-2 hover:bg-white/5 text-white">
             <ArrowLeft size={20} />
           </Button>
         </Link>
@@ -133,7 +145,7 @@ export default function ChatPage({
           <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-zabb-bg" />
         </div>
         <div className="flex-1 min-w-0 ml-1">
-          <h1 className="font-bold text-xl leading-tight truncate tracking-tight">{character.name}</h1>
+          <h1 className="font-bold text-xl leading-tight truncate tracking-tight text-white">{character.name}</h1>
           <div className="flex items-center gap-2 mt-0.5">
             <p className="text-[10px] uppercase font-black tracking-widest text-zabb-muted-fg flex items-center gap-1">
               <span className="w-1 h-1 rounded-full bg-zabb-muted-fg" />
@@ -277,7 +289,7 @@ export default function ChatPage({
                 }
               }}
               placeholder={`พิมพ์ข้อความถึง ${character.name}... (Shift+Enter เพื่อเว้นบรรทัด)`}
-              className="resize-none min-h-[60px] max-h-[300px] border-none bg-transparent focus-visible:ring-0 text-lg py-4 px-4 leading-relaxed"
+              className="resize-none min-h-[60px] max-h-[300px] border-none bg-transparent focus-visible:ring-0 text-lg py-4 px-4 leading-relaxed text-white"
             />
             <Button 
               onClick={handleSend} 

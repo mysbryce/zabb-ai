@@ -108,13 +108,24 @@ export default function Home() {
                     className="flex flex-col gap-6"
                   >
                     <div className="group relative">
-                      <div className="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-all transform scale-90 group-hover:scale-100">
+                      <div className="absolute top-4 right-4 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-all transform scale-90 group-hover:scale-100">
+                        <Link href={`/edit/${char.id}`}>
+                          <Button 
+                            variant="secondary" 
+                            size="sm" 
+                            className="h-10 w-10 p-0 rounded-full bg-black/60 hover:bg-white hover:text-black border-none text-white backdrop-blur-md"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Settings size={16} />
+                          </Button>
+                        </Link>
                          <Button 
                           variant="secondary" 
                           size="sm" 
                           className="h-10 w-10 p-0 rounded-full bg-black/60 hover:bg-red-500/90 border-none text-white backdrop-blur-md"
                           onClick={(e) => {
                             e.preventDefault()
+                            e.stopPropagation()
                             if(confirm('Delete this character and all its history permanently?')) {
                               charSessions.forEach(s => deleteSession(s.id))
                               deleteCharacter(char.id)

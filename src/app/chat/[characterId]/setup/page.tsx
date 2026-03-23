@@ -10,7 +10,7 @@ import { ImageUpload } from '@/components/ui/ImageUpload'
 import { AIGenerator } from '@/components/ui/AIGenerator'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Play, RefreshCcw, UserPlus } from 'lucide-react'
+import { ArrowLeft, Play, RefreshCcw, UserPlus, Loader2 } from 'lucide-react'
 
 export default function ChatSetupPage({
   params,
@@ -26,20 +26,25 @@ export default function ChatSetupPage({
   const currentUserPersona = useZabbStore((state) => state.currentUserPersona)
   const setCurrentUserPersona = useZabbStore((state) => state.setCurrentUserPersona)
 
-  const character = characters.find((c) => c.id === characterId)
-
-  // Start with empty form by default to prevent "old data" confusion
+  const [hasHydrated, setHasHydrated] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     info: '',
     avatar: '',
   })
 
+  // Handle hydration
   useEffect(() => {
-    if (!character) {
+    setHasHydrated(true)
+  }, [])
+
+  const character = characters.find((c) => c.id === characterId)
+
+  useEffect(() => {
+    if (hasHydrated && !character) {
       router.push('/')
     }
-  }, [character, router])
+  }, [hasHydrated, character, router])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
@@ -84,7 +89,13 @@ export default function ChatSetupPage({
     router.push(`/chat/${characterId}/${sessionId}`)
   }
 
-  if (!character) return null
+  if (!hasHydrated || !character) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-zabb-bg">
+        <Loader2 className="h-8 w-8 animate-spin text-white/20" />
+      </div>
+    )
+  }
 
   return (
     <motion.main 
