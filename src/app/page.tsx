@@ -64,7 +64,7 @@ export default function Home() {
   }
 
   return (
-    <main className="max-w-6xl mx-auto p-6 md:p-12 font-sarabun relative min-h-screen">
+    <main className="max-w-6xl mx-auto p-4 md:p-12 font-sarabun relative min-h-screen">
       {/* Background Orbs */}
       <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-white/[0.02] rounded-full blur-[120px] pointer-events-none" />
       <div className="fixed bottom-0 right-1/4 w-[400px] h-[400px] bg-white/[0.01] rounded-full blur-[100px] pointer-events-none" />
@@ -72,34 +72,34 @@ export default function Home() {
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-6 relative z-10"
+        className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-16 gap-6 relative z-10"
       >
-        <div>
+        <div className="w-full md:w-auto">
           <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-5xl font-black text-white tracking-tighter italic">Zabb AI</h1>
+            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter italic">Zabb AI</h1>
             <span className="bg-white text-black text-[10px] font-black px-2 py-0.5 rounded-sm uppercase tracking-widest mt-1">Engine v16</span>
           </div>
-          <p className="text-white/40 text-lg font-medium tracking-tight">The ultimate local roleplay experience.</p>
+          <p className="text-white/40 text-base md:text-lg font-medium tracking-tight">The ultimate local roleplay experience.</p>
         </div>
         
-        <div className="flex flex-wrap gap-3">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 md:gap-3 w-full md:w-auto">
           <Button 
             variant="outline" 
             size="sm" 
             onClick={() => setIsSettingsOpen(true)} 
-            className="gap-2 border-white/10 hover:border-white/40 bg-white/5 rounded-full px-5 h-11"
+            className="gap-2 border-white/10 hover:border-white/40 bg-white/5 rounded-full px-4 md:px-5 h-10 md:h-11 justify-center sm:justify-start"
           >
             <Settings size={16} />
-            <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Settings</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">Settings</span>
           </Button>
           <Button 
             variant="outline" 
             size="sm" 
             onClick={() => setIsInfoOpen(true)} 
-            className="gap-2 border-white/10 hover:border-white/40 bg-white/5 rounded-full px-5 h-11"
+            className="gap-2 border-white/10 hover:border-white/40 bg-white/5 rounded-full px-4 md:px-5 h-10 md:h-11 justify-center sm:justify-start"
           >
             <Info size={16} />
-            <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">About</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">About</span>
           </Button>
           
           <input 
@@ -113,14 +113,14 @@ export default function Home() {
             variant="outline" 
             size="sm" 
             onClick={() => fileInputRef.current?.click()} 
-            className="gap-2 border-white/10 hover:border-white/40 bg-white/5 rounded-full px-5 h-11"
+            className="gap-2 border-white/10 hover:border-white/40 bg-white/5 rounded-full px-4 md:px-5 h-10 md:h-11 justify-center sm:justify-start"
           >
             <Upload size={16} />
-            <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Import</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">Import</span>
           </Button>
 
-          <Link href="/create">
-            <Button className="gap-2 bg-white text-black hover:bg-white/90 rounded-full px-6 h-11 shadow-[0_0_30px_rgba(255,255,255,0.15)]">
+          <Link href="/create" className="col-span-2 sm:col-span-1">
+            <Button className="w-full gap-2 bg-white text-black hover:bg-white/90 rounded-full px-6 h-10 md:h-11 shadow-[0_0_30px_rgba(255,255,255,0.15)]">
               <Plus size={20} />
               <span className="text-[10px] font-black uppercase tracking-widest">Create Character</span>
             </Button>
@@ -134,30 +134,30 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
-            className="text-center py-40 border border-dashed border-white/10 rounded-[3rem] bg-white/[0.02] backdrop-blur-sm"
+            className="text-center py-20 md:py-40 border border-dashed border-white/10 rounded-[2rem] md:rounded-[3rem] bg-white/[0.02] backdrop-blur-sm px-4"
           >
             <Sparkles size={40} className="mx-auto mb-6 text-white/20" />
-            <p className="text-white/40 text-xl font-bold mb-8 tracking-tight">Your world is currently empty.</p>
-            <div className="flex justify-center gap-4">
-              <Button variant="outline" size="lg" onClick={() => fileInputRef.current?.click()} className="rounded-full px-8 h-14 font-black uppercase text-xs tracking-[0.2em] gap-2">
+            <p className="text-white/40 text-lg md:text-xl font-bold mb-8 tracking-tight">Your world is currently empty.</p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <Button variant="outline" size="lg" onClick={() => fileInputRef.current?.click()} className="rounded-full px-8 h-12 md:h-14 font-black uppercase text-[10px] md:text-xs tracking-[0.2em] gap-2">
                 <Upload size={18} />
                 Import Character
               </Button>
               <Link href="/create">
-                <Button size="lg" className="bg-white text-black hover:bg-white/90 rounded-full px-10 h-14 font-black uppercase text-xs tracking-[0.2em]">
+                <Button size="lg" className="w-full sm:w-auto bg-white text-black hover:bg-white/90 rounded-full px-8 md:px-10 h-12 md:h-14 font-black uppercase text-[10px] md:text-xs tracking-[0.2em]">
                   Craft Your First Legend
                 </Button>
               </Link>
             </div>
           </motion.div>
         ) : (
-          <div className="space-y-12 relative z-10">
-            <div className="flex items-center gap-4 mb-8">
-              <h2 className="text-xs font-black uppercase tracking-[0.4em] text-white/20">Active Characters</h2>
+          <div className="space-y-8 md:space-y-12 relative z-10">
+            <div className="flex items-center gap-4 mb-4 md:mb-8">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20">Active Characters</h2>
               <div className="h-px flex-1 bg-white/5" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
               {characters.map((char, index) => {
                 const charSessions = getSessionsForCharacter(char.id)
                 
@@ -168,34 +168,34 @@ export default function Home() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1, duration: 0.5 }}
-                    className="flex flex-col gap-6"
+                    className="flex flex-col gap-4 md:gap-6"
                   >
                     <div className="group relative">
-                      <div className="absolute top-4 right-4 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-all transform scale-90 group-hover:scale-100">
+                      <div className="absolute top-3 right-3 md:top-4 md:right-4 z-20 flex gap-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition-all transform scale-90 group-hover:scale-100">
                         <Button 
                           variant="secondary" 
                           size="sm" 
-                          className="h-10 w-10 p-0 rounded-full bg-black/60 hover:bg-white hover:text-black border-none text-white backdrop-blur-md"
+                          className="h-9 w-9 md:h-10 md:w-10 p-0 rounded-full bg-black/60 hover:bg-white hover:text-black border-none text-white backdrop-blur-md"
                           onClick={(e) => handleExport(e, char)}
                           title="Export to JSON"
                         >
-                          <Download size={16} />
+                          <Download size={14} md:size={16} />
                         </Button>
                         <Link href={`/edit/${char.id}`}>
                           <Button 
                             variant="secondary" 
                             size="sm" 
-                            className="h-10 w-10 p-0 rounded-full bg-black/60 hover:bg-white hover:text-black border-none text-white backdrop-blur-md"
+                            className="h-9 w-9 md:h-10 md:w-10 p-0 rounded-full bg-black/60 hover:bg-white hover:text-black border-none text-white backdrop-blur-md"
                             onClick={(e) => e.stopPropagation()}
                             title="Edit Character"
                           >
-                            <Settings size={16} />
+                            <Settings size={14} md:size={16} />
                           </Button>
                         </Link>
                          <Button 
                           variant="secondary" 
                           size="sm" 
-                          className="h-10 w-10 p-0 rounded-full bg-black/60 hover:bg-red-500/90 border-none text-white backdrop-blur-md"
+                          className="h-9 w-9 md:h-10 md:w-10 p-0 rounded-full bg-black/60 hover:bg-red-500/90 border-none text-white backdrop-blur-md"
                           onClick={(e) => {
                             e.preventDefault()
                             e.stopPropagation()
@@ -206,34 +206,34 @@ export default function Home() {
                           }}
                           title="Delete"
                         >
-                          <Trash2 size={16} />
+                          <Trash2 size={14} md:size={16} />
                         </Button>
                       </div>
 
                       <Link href={`/chat/${char.id}/setup`}>
-                        <div className="relative border border-white/5 rounded-[2.5rem] p-8 bg-white/[0.03] hover:bg-white/[0.06] transition-all hover:border-white/20 cursor-pointer overflow-hidden group/card shadow-2xl">
+                        <div className="relative border border-white/5 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 bg-white/[0.03] hover:bg-white/[0.06] transition-all hover:border-white/20 cursor-pointer overflow-hidden group/card shadow-2xl">
                           <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover/card:bg-white/10 transition-colors" />
                           
-                          <div className="flex items-center gap-6 mb-6">
-                            <Avatar src={char.avatar} alt={char.name} size="xl" className="shadow-2xl ring-1 ring-white/10 ring-offset-4 ring-offset-black transition-transform group-hover/card:scale-105 duration-500" />
+                          <div className="flex items-center gap-4 md:gap-6 mb-4 md:mb-6">
+                            <Avatar src={char.avatar} alt={char.name} size="lg" md:size="xl" className="shadow-2xl ring-1 ring-white/10 ring-offset-4 ring-offset-black transition-transform group-hover/card:scale-105 duration-500" />
                             <div className="flex-1 min-w-0">
-                              <h3 className="font-black text-2xl text-white truncate tracking-tighter">
+                              <h3 className="font-black text-xl md:text-2xl text-white truncate tracking-tighter">
                                 {char.name}
                               </h3>
-                              <div className="flex gap-2 mt-2">
-                                <span className="text-[9px] font-black px-3 py-1 rounded-full bg-white/10 text-white/60 uppercase tracking-widest">{char.gender || 'Any'}</span>
-                                <span className="text-[9px] font-black px-3 py-1 rounded-full bg-white/10 text-white/60 uppercase tracking-widest">{char.age ? `${char.age}y` : 'Age unknown'}</span>
+                              <div className="flex gap-2 mt-1 md:mt-2">
+                                <span className="text-[8px] md:text-[9px] font-black px-2 md:px-3 py-0.5 md:py-1 rounded-full bg-white/10 text-white/60 uppercase tracking-widest">{char.gender || 'Any'}</span>
+                                <span className="text-[8px] md:text-[9px] font-black px-2 md:px-3 py-0.5 md:py-1 rounded-full bg-white/10 text-white/60 uppercase tracking-widest">{char.age ? `${char.age}y` : 'Age unknown'}</span>
                               </div>
                             </div>
                           </div>
                           
-                          <p className="text-sm text-white/40 line-clamp-3 leading-relaxed font-medium">
+                          <p className="text-xs md:text-sm text-white/40 line-clamp-3 leading-relaxed font-medium">
                             {char.personality}
                           </p>
                           
-                          <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between text-white/20 group-hover/card:text-white transition-colors">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">New Roleplay</span>
-                            <ChevronRight size={16} className="transform translate-x-0 group-hover/card:translate-x-1 transition-transform" />
+                          <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-white/5 flex items-center justify-between text-white/20 group-hover/card:text-white transition-colors">
+                            <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em]">New Roleplay</span>
+                            <ChevronRight size={14} md:size={16} className="transform translate-x-0 group-hover/card:translate-x-1 transition-transform" />
                           </div>
                         </div>
                       </Link>
@@ -241,8 +241,8 @@ export default function Home() {
 
                     {/* Chat History Section */}
                     {charSessions.length > 0 && (
-                      <div className="px-4 space-y-3">
-                        <div className="flex items-center gap-2 text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">
+                      <div className="px-2 md:px-4 space-y-2 md:space-y-3">
+                        <div className="flex items-center gap-2 text-[8px] md:text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">
                           <MessageSquare size={10} />
                           Thread History
                         </div>
@@ -256,27 +256,27 @@ export default function Home() {
                             >
                               <Link 
                                 href={`/chat/${char.id}/${session.id}`}
-                                className="flex-1 flex items-center justify-between p-4 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.08] hover:border-white/10 transition-all text-xs"
+                                className="flex-1 flex items-center justify-between p-3 md:p-4 rounded-xl md:rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.08] hover:border-white/10 transition-all text-[10px] md:text-xs"
                               >
-                                <div className="flex flex-col gap-1">
-                                  <span className="font-bold text-white/80">Scenario with {session.userPersona.name}</span>
-                                  <span className="text-[9px] font-black text-white/20 uppercase tracking-widest">
+                                <div className="flex flex-col gap-0.5 md:gap-1">
+                                  <span className="font-bold text-white/80 line-clamp-1">Scenario with {session.userPersona.name}</span>
+                                  <span className="text-[8px] md:text-[9px] font-black text-white/20 uppercase tracking-widest">
                                     {session.messages.length} interactions
                                   </span>
                                 </div>
                                 <div className="text-white/10 group-hover/session:text-white/40 transition-colors">
-                                  <History size={14} />
+                                  <History size={12} md:size={14} />
                                 </div>
                               </Link>
                               <Button 
                                 variant="ghost" 
                                 size="sm" 
-                                className="opacity-0 group-hover/session:opacity-100 h-10 w-10 p-0 rounded-2xl bg-white/5 hover:bg-red-500/20 text-white/40 hover:text-red-500 transition-all border border-white/5"
+                                className="opacity-100 md:opacity-0 group-hover/session:opacity-100 h-9 w-9 md:h-10 md:w-10 p-0 rounded-xl md:rounded-2xl bg-white/5 hover:bg-red-500/20 text-white/40 hover:text-red-500 transition-all border border-white/5"
                                 onClick={() => {
                                   if(confirm('Delete this story thread?')) deleteSession(session.id)
                                 }}
                               >
-                                <Trash2 size={14} />
+                                <Trash2 size={12} md:size={14} />
                               </Button>
                             </motion.div>
                           ))}

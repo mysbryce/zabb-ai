@@ -143,21 +143,21 @@ export default function ChatPage({
       <motion.header 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="flex items-center gap-4 p-5 border-b border-zabb-border/60 bg-zabb-bg/80 backdrop-blur-xl sticky top-0 z-10 shrink-0"
+        className="flex items-center gap-3 md:gap-4 p-3 md:p-5 border-b border-zabb-border/60 bg-zabb-bg/80 backdrop-blur-xl sticky top-0 z-50 shrink-0"
       >
         <Link href="/">
-          <Button variant="ghost" size="sm" className="px-2 hover:bg-white/5 text-white">
+          <Button variant="ghost" size="sm" className="px-1 md:px-2 hover:bg-white/5 text-white">
             <ArrowLeft size={20} />
           </Button>
         </Link>
         <div className="relative group">
-          <Avatar src={character.avatar} alt={character.name} size="md" className="ring-1 ring-white/10 ring-offset-2 ring-offset-zabb-bg transition-transform group-hover:scale-105" />
-          <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-zabb-bg" />
+          <Avatar src={character.avatar} alt={character.name} size="sm" md:size="md" className="ring-1 ring-white/10 ring-offset-2 ring-offset-zabb-bg transition-transform group-hover:scale-105" />
+          <span className="absolute bottom-0 right-0 w-2.5 h-2.5 md:w-3 md:h-3 bg-green-500 rounded-full border-2 border-zabb-bg" />
         </div>
         <div className="flex-1 min-w-0 ml-1">
-          <h1 className="font-bold text-xl leading-tight truncate tracking-tight text-white">{character.name}</h1>
+          <h1 className="font-bold text-lg md:text-xl leading-tight truncate tracking-tight text-white">{character.name}</h1>
           <div className="flex items-center gap-2 mt-0.5">
-            <p className="text-[10px] uppercase font-black tracking-widest text-zabb-muted-fg flex items-center gap-1">
+            <p className="text-[8px] md:text-[10px] uppercase font-black tracking-widest text-zabb-muted-fg flex items-center gap-1">
               <span className="w-1 h-1 rounded-full bg-zabb-muted-fg" />
               Immersion Mode
             </p>
@@ -173,17 +173,17 @@ export default function ChatPage({
       </motion.header>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 md:px-10 py-10 space-y-12 scroll-smooth">
+      <div className="flex-1 overflow-y-auto px-3 md:px-10 py-6 md:py-10 space-y-8 md:space-y-12 scroll-smooth">
         <AnimatePresence mode="popLayout" initial={false}>
           {session.messages.length === 0 && (
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-20 px-8"
+              className="text-center py-10 md:py-20 px-4 md:px-8"
             >
-              <div className="max-w-lg mx-auto p-10 glass-border rounded-[2.5rem] bg-white/[0.02] italic text-zabb-muted-fg border-dashed">
-                <p className="text-[10px] font-black text-white/20 mb-6 uppercase tracking-[0.3em] text-center">เริ่มต้นเรื่องราว</p>
-                <p className="leading-loose text-lg text-white/60">"{character.startingSituation}"</p>
+              <div className="max-w-lg mx-auto p-6 md:p-10 glass-border rounded-[2rem] md:rounded-[2.5rem] bg-white/[0.02] italic text-zabb-muted-fg border-dashed">
+                <p className="text-[10px] font-black text-white/20 mb-4 md:mb-6 uppercase tracking-[0.3em] text-center">เริ่มต้นเรื่องราว</p>
+                <p className="leading-loose text-base md:text-lg text-white/60">"{character.startingSituation}"</p>
               </div>
             </motion.div>
           )}
@@ -200,16 +200,16 @@ export default function ChatPage({
                 initial={{ opacity: 0, x: isUser ? 20 : -20, scale: 0.98 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 transition={{ type: 'spring', duration: 0.6, bounce: 0.2 }}
-                className={`flex gap-5 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}
+                className={`flex gap-3 md:gap-5 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}
               >
-                <Avatar src={avatar} alt={name} size="sm" className="mt-1 shadow-2xl shrink-0 glass-border" />
+                <Avatar src={avatar} alt={name} size="xs" md:size="sm" className="mt-1 shadow-2xl shrink-0 glass-border" />
                 <div className={`flex flex-col ${isUser ? 'items-end' : 'items-start'} max-w-[85%] md:max-w-[75%]`}>
-                  <div className={`flex items-center gap-2 mb-2 px-1 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
+                  <div className={`flex items-center gap-2 mb-1.5 md:mb-2 px-1 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
+                    <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
                       {name}
                     </span>
                   </div>
-                  <div className={`p-6 rounded-[1.5rem] shadow-2xl overflow-x-auto transition-all ${
+                  <div className={`p-4 md:p-6 rounded-[1.2rem] md:rounded-[1.5rem] shadow-2xl overflow-x-auto transition-all ${
                     isUser 
                     ? 'bg-white/[0.04] text-white/90 rounded-tr-none glass-border border-white/10' 
                     : 'bg-transparent border border-white/10 rounded-tl-none glass-border'
@@ -226,12 +226,12 @@ export default function ChatPage({
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex gap-5"
+            className="flex gap-3 md:gap-5"
           >
-            <Avatar src={character.avatar} alt={character.name} size="sm" className="mt-1 glass-border" />
+            <Avatar src={character.avatar} alt={character.name} size="xs" md:size="sm" className="mt-1 glass-border" />
             <div className="flex flex-col items-start">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-2 px-1">{character.name}</span>
-              <div className="p-6 rounded-[1.5rem] border border-white/10 rounded-tl-none glass-border flex gap-2.5 items-center">
+              <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-1.5 md:mb-2 px-1">{character.name}</span>
+              <div className="p-4 md:p-6 rounded-[1.2rem] md:rounded-[1.5rem] border border-white/10 rounded-tl-none glass-border flex gap-2.5 items-center">
                 <motion.div animate={{ opacity: [0.2, 1, 0.2] }} transition={{ repeat: Infinity, duration: 1.5 }} className="w-1.5 h-1.5 rounded-full bg-white" />
                 <motion.div animate={{ opacity: [0.2, 1, 0.2] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.3 }} className="w-1.5 h-1.5 rounded-full bg-white" />
                 <motion.div animate={{ opacity: [0.2, 1, 0.2] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.6 }} className="w-1.5 h-1.5 rounded-full bg-white" />
@@ -246,16 +246,16 @@ export default function ChatPage({
       <motion.div 
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="p-6 md:p-8 shrink-0 bg-gradient-to-t from-black via-black to-transparent chat-input-shadow z-20"
+        className="p-4 md:p-8 shrink-0 bg-gradient-to-t from-black via-black to-transparent chat-input-shadow z-20"
       >
-        <div className="max-w-4xl mx-auto space-y-4">
+        <div className="max-w-4xl mx-auto space-y-3 md:space-y-4">
           {/* Action/Vibe Shortcuts */}
-          <div className="flex gap-2 mb-2 overflow-x-auto pb-1 no-scrollbar text-white">
+          <div className="flex gap-2 mb-1 md:mb-2 overflow-x-auto pb-1 no-scrollbar text-white">
             <Button 
               variant="secondary" 
               size="sm" 
               onClick={() => insertTag('บรรยายท่าทาง')}
-              className="text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/5 hover:border-white/20 gap-2 rounded-full whitespace-nowrap"
+              className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/5 hover:border-white/20 gap-2 rounded-full whitespace-nowrap h-8 md:h-9"
             >
               <Ghost size={12} />
               ท่าทาง
@@ -264,7 +264,7 @@ export default function ChatPage({
               variant="secondary" 
               size="sm" 
               onClick={() => insertTag('ความรู้สึกในใจ')}
-              className="text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/5 hover:border-white/20 gap-2 rounded-full whitespace-nowrap"
+              className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/5 hover:border-white/20 gap-2 rounded-full whitespace-nowrap h-8 md:h-9"
             >
               <Wand2 size={12} />
               ความรู้สึก
@@ -273,7 +273,7 @@ export default function ChatPage({
               variant="secondary" 
               size="sm" 
               onClick={() => insertTag('ชุดที่สวมใส่')}
-              className="text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/5 hover:border-white/20 gap-2 rounded-full whitespace-nowrap"
+              className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/5 hover:border-white/20 gap-2 rounded-full whitespace-nowrap h-8 md:h-9"
             >
               ชุด
             </Button>
@@ -281,13 +281,13 @@ export default function ChatPage({
               variant="secondary" 
               size="sm" 
               onClick={() => insertTag('สถานที่')}
-              className="text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/5 hover:border-white/20 gap-2 rounded-full whitespace-nowrap"
+              className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/5 hover:border-white/20 gap-2 rounded-full whitespace-nowrap h-8 md:h-9"
             >
               สถานที่
             </Button>
           </div>
 
-          <div className="flex gap-4 items-end bg-white/[0.03] p-3 rounded-[2rem] glass-border border-white/10 group focus-within:border-white/30 transition-all shadow-2xl">
+          <div className="flex gap-2 md:gap-4 items-end bg-white/[0.03] p-2 md:p-3 rounded-[1.5rem] md:rounded-[2rem] glass-border border-white/10 group focus-within:border-white/30 transition-all shadow-2xl">
             <Textarea 
               ref={textareaRef}
               value={input}
@@ -298,19 +298,19 @@ export default function ChatPage({
                   handleSend()
                 }
               }}
-              placeholder={`พิมพ์ข้อความถึง ${character.name}... (Shift+Enter เพื่อเว้นบรรทัด)`}
-              className="resize-none min-h-[60px] max-h-[300px] border-none bg-transparent focus-visible:ring-0 text-lg py-4 px-4 leading-relaxed text-white"
+              placeholder={`พิมพ์ข้อความ...`}
+              className="resize-none min-h-[50px] md:min-h-[60px] max-h-[200px] md:max-h-[300px] border-none bg-transparent focus-visible:ring-0 text-base md:text-lg py-3 md:py-4 px-3 md:px-4 leading-relaxed text-white"
             />
             <Button 
               onClick={handleSend} 
               disabled={isLoading || !input.trim()} 
-              className="h-[60px] w-[60px] p-0 rounded-[1.5rem] shrink-0 shadow-[0_10px_30px_-5px_rgba(255,255,255,0.2)] bg-white text-black hover:bg-white/90 active:scale-95 transition-all"
+              className="h-[50px] w-[50px] md:h-[60px] md:w-[60px] p-0 rounded-[1.2rem] md:rounded-[1.5rem] shrink-0 shadow-[0_10px_30px_-5px_rgba(255,255,255,0.2)] bg-white text-black hover:bg-white/90 active:scale-95 transition-all"
             >
-              <Send size={24} />
+              <Send size={20} md:size={24} />
             </Button>
           </div>
-          <p className="text-center text-[9px] font-black text-white/10 uppercase tracking-[0.5em] mt-4">
-            Zabb AI Engine V16.0 🌶️ No Logs Private Mode
+          <p className="text-center text-[8px] font-black text-white/5 uppercase tracking-[0.4em] mt-2 md:mt-4">
+            Zabb AI Engine V16.0 🌶️ Local Mode
           </p>
         </div>
       </motion.div>

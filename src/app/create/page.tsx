@@ -62,16 +62,16 @@ export default function CreateCharacterPage() {
     <motion.main
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-2xl mx-auto p-8 font-sarabun"
+      className="max-w-2xl mx-auto p-4 md:p-8 font-sarabun"
     >
-      <div className="mb-8 border-b border-zabb-border pb-4 flex justify-between items-center">
+      <div className="mb-6 md:mb-8 border-b border-zabb-border pb-4 flex flex-col sm:flex-row gap-4 sm:justify-between sm:items-center">
         <div className="flex items-center gap-3">
           <Link href="/">
             <Button variant="ghost" size="sm" className="px-2">
               <ArrowLeft size={18} />
             </Button>
           </Link>
-          <h1 className="text-2xl font-bold">สร้างตัวละครใหม่</h1>
+          <h1 className="text-xl md:text-2xl font-bold">สร้างตัวละครใหม่</h1>
         </div>
         <div className="flex gap-2">
           <ImportAI onImported={handleImported} />
@@ -80,7 +80,7 @@ export default function CreateCharacterPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-6 bg-zabb-muted/30 p-6 rounded-xl border border-zabb-border">
+        <div className="space-y-6 bg-zabb-muted/30 p-4 md:p-6 rounded-xl border border-zabb-border">
           <ImageUpload 
             label="รูปประจำตัว AI" 
             onUploadSuccess={handleUploadSuccess} 
