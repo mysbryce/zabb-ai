@@ -179,7 +179,7 @@ export default function Home() {
                           onClick={(e) => handleExport(e, char)}
                           title="Export to JSON"
                         >
-                          <Download size={14} md:size={16} />
+                          <Download size={16} />
                         </Button>
                         <Link href={`/edit/${char.id}`}>
                           <Button 
@@ -189,7 +189,7 @@ export default function Home() {
                             onClick={(e) => e.stopPropagation()}
                             title="Edit Character"
                           >
-                            <Settings size={14} md:size={16} />
+                            <Settings size={16} />
                           </Button>
                         </Link>
                          <Button 
@@ -206,7 +206,7 @@ export default function Home() {
                           }}
                           title="Delete"
                         >
-                          <Trash2 size={14} md:size={16} />
+                          <Trash2 size={16} />
                         </Button>
                       </div>
 
@@ -215,7 +215,7 @@ export default function Home() {
                           <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover/card:bg-white/10 transition-colors" />
                           
                           <div className="flex items-center gap-4 md:gap-6 mb-4 md:mb-6">
-                            <Avatar src={char.avatar} alt={char.name} size="lg" md:size="xl" className="shadow-2xl ring-1 ring-white/10 ring-offset-4 ring-offset-black transition-transform group-hover/card:scale-105 duration-500" />
+                            <Avatar src={char.avatar} alt={char.name} size="lg" className="md:w-24 md:h-24 shadow-2xl ring-1 ring-white/10 ring-offset-4 ring-offset-black transition-transform group-hover/card:scale-105 duration-500" />
                             <div className="flex-1 min-w-0">
                               <h3 className="font-black text-xl md:text-2xl text-white truncate tracking-tighter">
                                 {char.name}
@@ -233,7 +233,7 @@ export default function Home() {
                           
                           <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-white/5 flex items-center justify-between text-white/20 group-hover/card:text-white transition-colors">
                             <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em]">New Roleplay</span>
-                            <ChevronRight size={14} md:size={16} className="transform translate-x-0 group-hover/card:translate-x-1 transition-transform" />
+                            <ChevronRight size={16} className="transform translate-x-0 group-hover/card:translate-x-1 transition-transform" />
                           </div>
                         </div>
                       </Link>
@@ -265,7 +265,7 @@ export default function Home() {
                                   </span>
                                 </div>
                                 <div className="text-white/10 group-hover/session:text-white/40 transition-colors">
-                                  <History size={12} md:size={14} />
+                                  <History size={14} />
                                 </div>
                               </Link>
                               <Button 
@@ -276,7 +276,7 @@ export default function Home() {
                                   if(confirm('Delete this story thread?')) deleteSession(session.id)
                                 }}
                               >
-                                <Trash2 size={12} md:size={14} />
+                                <Trash2 size={14} />
                               </Button>
                             </motion.div>
                           ))}

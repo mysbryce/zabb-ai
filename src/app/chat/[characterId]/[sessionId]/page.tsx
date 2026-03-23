@@ -151,7 +151,7 @@ export default function ChatPage({
           </Button>
         </Link>
         <div className="relative group">
-          <Avatar src={character.avatar} alt={character.name} size="sm" md:size="md" className="ring-1 ring-white/10 ring-offset-2 ring-offset-zabb-bg transition-transform group-hover:scale-105" />
+          <Avatar src={character.avatar} alt={character.name} size="sm" className="md:w-12 md:h-12 ring-1 ring-white/10 ring-offset-2 ring-offset-zabb-bg transition-transform group-hover:scale-105" />
           <span className="absolute bottom-0 right-0 w-2.5 h-2.5 md:w-3 md:h-3 bg-green-500 rounded-full border-2 border-zabb-bg" />
         </div>
         <div className="flex-1 min-w-0 ml-1">
@@ -202,7 +202,7 @@ export default function ChatPage({
                 transition={{ type: 'spring', duration: 0.6, bounce: 0.2 }}
                 className={`flex gap-3 md:gap-5 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}
               >
-                <Avatar src={avatar} alt={name} size="xs" md:size="sm" className="mt-1 shadow-2xl shrink-0 glass-border" />
+                <Avatar src={avatar} alt={name} size="sm" className="mt-1 shadow-2xl shrink-0 glass-border !w-8 !h-8 md:!w-10 md:!h-10" />
                 <div className={`flex flex-col ${isUser ? 'items-end' : 'items-start'} max-w-[85%] md:max-w-[75%]`}>
                   <div className={`flex items-center gap-2 mb-1.5 md:mb-2 px-1 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
                     <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
@@ -228,7 +228,7 @@ export default function ChatPage({
             animate={{ opacity: 1, y: 0 }}
             className="flex gap-3 md:gap-5"
           >
-            <Avatar src={character.avatar} alt={character.name} size="xs" md:size="sm" className="mt-1 glass-border" />
+            <Avatar src={character.avatar} alt={character.name} size="sm" className="mt-1 glass-border !w-8 !h-8 md:!w-10 md:!h-10" />
             <div className="flex flex-col items-start">
               <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-1.5 md:mb-2 px-1">{character.name}</span>
               <div className="p-4 md:p-6 rounded-[1.2rem] md:rounded-[1.5rem] border border-white/10 rounded-tl-none glass-border flex gap-2.5 items-center">
@@ -306,7 +306,7 @@ export default function ChatPage({
               disabled={isLoading || !input.trim()} 
               className="h-[50px] w-[50px] md:h-[60px] md:w-[60px] p-0 rounded-[1.2rem] md:rounded-[1.5rem] shrink-0 shadow-[0_10px_30px_-5px_rgba(255,255,255,0.2)] bg-white text-black hover:bg-white/90 active:scale-95 transition-all"
             >
-              <Send size={20} md:size={24} />
+              <Send size={24} />
             </Button>
           </div>
           <p className="text-center text-[8px] font-black text-white/5 uppercase tracking-[0.4em] mt-2 md:mt-4">
