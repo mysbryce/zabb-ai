@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useZabbStore } from '@/store/useZabbStore'
 import { Button } from '@/components/ui/Button'
 import { Avatar } from '@/components/ui/Avatar'
 import { Modal } from '@/components/ui/Modal'
 import { SettingsModal } from '@/components/ui/SettingsModal'
 import Link from 'next/link'
-import { Plus, Info, Settings, Trash2, MessageSquare, History, Sparkles, ChevronRight } from 'lucide-react'
+import { Plus, Info, Settings, Trash2, MessageSquare, History, Sparkles, ChevronRight, Upload, Download } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function Home() {
@@ -15,13 +15,52 @@ export default function Home() {
   const sessions = useZabbStore((state) => state.sessions)
   const deleteCharacter = useZabbStore((state) => state.deleteCharacter)
   const deleteSession = useZabbStore((state) => state.deleteSession)
+  const addCharacter = useZabbStore((state) => state.addCharacter)
   const settings = useZabbStore((state) => state.settings)
   
   const [isInfoOpen, setIsInfoOpen] = useState(false)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const getSessionsForCharacter = (charId: string) => {
     return Object.values(sessions).filter((s) => s.characterId === charId)
+  }
+
+  const handleExport = (e: React.MouseEvent, char: any) => {
+    e.preventDefault()
+    e.stopPropagation()
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(char, null, 2))
+    const downloadAnchorNode = document.createElement('a')
+    downloadAnchorNode.setAttribute("href", dataStr)
+    downloadAnchorNode.setAttribute("download", `${char.name.replace(/\s+/g, '_')}_zabb_ai.json`)
+    document.body.appendChild(downloadAnchorNode)
+    downloadAnchorNode.click()
+    downloadAnchorNode.remove()
+  }
+
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      try {
+        const charData = JSON.parse(event.target?.result as string)
+        
+        if (charData && charData.name && charData.startingSituation) {
+          const { id, ...newCharData } = charData
+          addCharacter(newCharData)
+          alert('Imported character successfully!')
+        } else {
+          alert('Invalid character file.')
+        }
+      } catch (error) {
+        console.error('Import error:', error)
+        alert('Error reading the file.')
+      }
+      e.target.value = ''
+    }
+    reader.readAsText(file)
   }
 
   return (
@@ -51,7 +90,7 @@ export default function Home() {
             className="gap-2 border-white/10 hover:border-white/40 bg-white/5 rounded-full px-5 h-11"
           >
             <Settings size={16} />
-            <span className="text-[10px] font-black uppercase tracking-widest">Settings</span>
+            <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Settings</span>
           </Button>
           <Button 
             variant="outline" 
@@ -60,8 +99,26 @@ export default function Home() {
             className="gap-2 border-white/10 hover:border-white/40 bg-white/5 rounded-full px-5 h-11"
           >
             <Info size={16} />
-            <span className="text-[10px] font-black uppercase tracking-widest">About</span>
+            <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">About</span>
           </Button>
+          
+          <input 
+            type="file" 
+            accept=".json" 
+            className="hidden" 
+            ref={fileInputRef}
+            onChange={handleImport} 
+          />
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => fileInputRef.current?.click()} 
+            className="gap-2 border-white/10 hover:border-white/40 bg-white/5 rounded-full px-5 h-11"
+          >
+            <Upload size={16} />
+            <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Import</span>
+          </Button>
+
           <Link href="/create">
             <Button className="gap-2 bg-white text-black hover:bg-white/90 rounded-full px-6 h-11 shadow-[0_0_30px_rgba(255,255,255,0.15)]">
               <Plus size={20} />
@@ -81,11 +138,17 @@ export default function Home() {
           >
             <Sparkles size={40} className="mx-auto mb-6 text-white/20" />
             <p className="text-white/40 text-xl font-bold mb-8 tracking-tight">Your world is currently empty.</p>
-            <Link href="/create">
-              <Button size="lg" className="bg-white text-black hover:bg-white/90 rounded-full px-10 h-14 font-black uppercase text-xs tracking-[0.2em]">
-                Craft Your First Legend
+            <div className="flex justify-center gap-4">
+              <Button variant="outline" size="lg" onClick={() => fileInputRef.current?.click()} className="rounded-full px-8 h-14 font-black uppercase text-xs tracking-[0.2em] gap-2">
+                <Upload size={18} />
+                Import Character
               </Button>
-            </Link>
+              <Link href="/create">
+                <Button size="lg" className="bg-white text-black hover:bg-white/90 rounded-full px-10 h-14 font-black uppercase text-xs tracking-[0.2em]">
+                  Craft Your First Legend
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         ) : (
           <div className="space-y-12 relative z-10">
@@ -109,12 +172,22 @@ export default function Home() {
                   >
                     <div className="group relative">
                       <div className="absolute top-4 right-4 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-all transform scale-90 group-hover:scale-100">
+                        <Button 
+                          variant="secondary" 
+                          size="sm" 
+                          className="h-10 w-10 p-0 rounded-full bg-black/60 hover:bg-white hover:text-black border-none text-white backdrop-blur-md"
+                          onClick={(e) => handleExport(e, char)}
+                          title="Export to JSON"
+                        >
+                          <Download size={16} />
+                        </Button>
                         <Link href={`/edit/${char.id}`}>
                           <Button 
                             variant="secondary" 
                             size="sm" 
                             className="h-10 w-10 p-0 rounded-full bg-black/60 hover:bg-white hover:text-black border-none text-white backdrop-blur-md"
                             onClick={(e) => e.stopPropagation()}
+                            title="Edit Character"
                           >
                             <Settings size={16} />
                           </Button>
@@ -131,6 +204,7 @@ export default function Home() {
                               deleteCharacter(char.id)
                             }
                           }}
+                          title="Delete"
                         >
                           <Trash2 size={16} />
                         </Button>
