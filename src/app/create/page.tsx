@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { ImageUpload } from '@/components/ui/ImageUpload'
 import { AIGenerator } from '@/components/ui/AIGenerator'
+import { ImportAI } from '@/components/ui/ImportAI'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
@@ -42,6 +43,13 @@ export default function CreateCharacterPage() {
     }))
   }
 
+  const handleImported = (data: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      ...data
+    }))
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!formData.name.trim() || !formData.startingSituation.trim()) return
@@ -65,7 +73,10 @@ export default function CreateCharacterPage() {
           </Link>
           <h1 className="text-2xl font-bold">สร้างตัวละครใหม่</h1>
         </div>
-        <AIGenerator type="character" onGenerated={handleAIGenerated} />
+        <div className="flex gap-2">
+          <ImportAI onImported={handleImported} />
+          <AIGenerator type="character" onGenerated={handleAIGenerated} />
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
