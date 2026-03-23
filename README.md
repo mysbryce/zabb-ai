@@ -1,4 +1,4 @@
-# Zabb AI
+# Zabb AI (แซ่บเอไอ)
 
 **Premium Local Roleplay Engine.**
 
@@ -8,8 +8,9 @@
 - Unfiltered: Freedom for creators.
 
 ### Setup
+
 1. `bun install`
 2. Create `.env` with `GROQ_API_KEY`
 3. `bun run dev`
 
-*This is an AI-driven project.*
+_This is an AI-driven project._
