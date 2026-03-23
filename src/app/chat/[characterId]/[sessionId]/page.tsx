@@ -124,10 +124,20 @@ export default function ChatPage({
   }
 
   return (
-    <main className="flex flex-col h-screen max-w-5xl mx-auto font-sarabun bg-zabb-bg relative">
+    <main className="flex flex-col h-screen max-w-5xl mx-auto font-sarabun bg-zabb-bg relative overflow-hidden">
+      {/* Character Background Image */}
+      <div 
+        className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none bg-repeat bg-fixed"
+        style={{ 
+          backgroundImage: `url(${character.avatar})`,
+          backgroundSize: '200px',
+          filter: 'grayscale(1) blur(1px)'
+        }}
+      />
+
       {/* Background Decorative elements */}
-      <div className="absolute top-20 -left-20 w-64 h-64 bg-white/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-20 -right-20 w-64 h-64 bg-white/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-20 -left-20 w-64 h-64 bg-white/5 rounded-full blur-[100px] pointer-events-none z-0" />
+      <div className="absolute bottom-20 -right-20 w-64 h-64 bg-white/5 rounded-full blur-[100px] pointer-events-none z-0" />
 
       {/* Header */}
       <motion.header 
