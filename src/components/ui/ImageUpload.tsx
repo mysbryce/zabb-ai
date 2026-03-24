@@ -4,17 +4,24 @@ import { useState, useRef } from 'react'
 import { Button } from './Button'
 import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { AIImageGenerator } from './AIImageGenerator'
 
 interface ImageUploadProps {
   onUploadSuccess: (url: string) => void
   label?: string
   currentUrl?: string
+  characterName?: string
 }
 
-export function ImageUpload({ onUploadSuccess, label = 'อัปโหลดรูปภาพ', currentUrl }: ImageUploadProps) {
+export function ImageUpload({ onUploadSuccess, label = 'อัปโหลดรูปภาพ', currentUrl, characterName }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [preview, setPreview] = useState<string | null>(currentUrl || null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleAIGenerated = (url: string) => {
+    setPreview(url)
+    onUploadSuccess(url)
+  }
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -99,21 +106,24 @@ export function ImageUpload({ onUploadSuccess, label = 'อัปโหลดร
             accept="image/*"
             className="hidden"
           />
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isUploading}
-            className="gap-2"
-          >
-            {isUploading ? (
-              <Loader2 size={16} className="animate-spin" />
-            ) : (
-              <Upload size={16} />
-            )}
-            {isUploading ? 'กำลังอัปโหลด...' : 'เลือกรูปภาพ'}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploading}
+              className="gap-2"
+            >
+              {isUploading ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                <Upload size={16} />
+              )}
+              {isUploading ? 'กำลังอัปโหลด...' : 'เลือกรูปภาพ'}
+            </Button>
+            <AIImageGenerator onGenerated={handleAIGenerated} characterName={characterName} />
+          </div>
           <p className="text-[10px] text-zabb-muted-fg mt-1">PNG, JPG หรือ GIF (สูงสุด 5MB)</p>
         </div>
       </div>

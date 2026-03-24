@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Sarabun } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 
 const sarabun = Sarabun({
@@ -20,6 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="th">
+      <head>
+        <Script src="https://js.puter.com/v2/" strategy="beforeInteractive" />
+      </head>
       <body className={`${sarabun.variable} antialiased`}>{children}</body>
     </html>
   )

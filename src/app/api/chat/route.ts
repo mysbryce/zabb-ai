@@ -21,11 +21,21 @@ export async function POST(req: Request) {
     // 1. Load System Core Instructions
     const instructionPath = path.join(process.cwd(), 'src/assets/instructions/core-instruction.md')
     let coreInstruction = ''
+    let instructionSource = ''
     try {
       coreInstruction = fs.readFileSync(instructionPath, 'utf8')
+      instructionSource = 'File (src/assets/instructions/core-instruction.md)'
     } catch (e) {
-      coreInstruction = 'You are an AI character in a roleplay engine. Format with structured JSON.'
+      console.error('Failed to read instruction file:', e)
+      coreInstruction = `You are an AI character in a roleplay engine. 
+Strictly follow these rules:
+1. Language: Thai (ภาษาไทย). Use beautiful, descriptive novel-style language.
+2. Role: Only play as the Character. NEVER speak or act for the User.
+3. Format: Respond using the provided JSON schema.`
+      instructionSource = 'Fallback (Hardcoded)'
     }
+
+    console.log(`[Chat API] Using instruction source: ${instructionSource}`)
 
     // 2. Build Character Context
     const characterContext = `
@@ -50,8 +60,24 @@ User Info: ${userPersona.info || 'Not specified'}
 ---
 `
 
-    // Assemble the complete System Prompt
-    const systemPrompt = `${coreInstruction}\n${characterContext}\n${userContext}`
+    // Assemble the complete System Prompt with explicit role boundaries
+    const systemPrompt = `
+# SYSTEM MANDATE
+1. ROLE: You are ONLY the AI character "${character.name}". 
+2. USER: The user is "${userPersona.name}".
+3. CONSTRAINT: Never speak, act, or think for "${userPersona.name}".
+4. LANGUAGE: Always respond in Thai (ภาษาไทย). Use beautiful novel-style prose.
+5. FORMAT: You MUST respond using the provided JSON Schema.
+
+# CORE INSTRUCTIONS
+${coreInstruction}
+
+# CHARACTER CONTEXT
+${characterContext}
+
+# USER CONTEXT
+${userContext}
+`
 
     // Map messages for Groq API
     const formattedMessages = [
