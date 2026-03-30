@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
 import { useZabbStore } from '@/store/useZabbStore'
 import type { Message } from '@/store/useZabbStore'
+import type { UserMessageKind } from '@/store/useZabbStore'
 import { Button } from '@/components/ui/Button'
 import { Textarea } from '@/components/ui/Textarea'
 import { Avatar } from '@/components/ui/Avatar'
@@ -28,9 +29,26 @@ export default function ChatPage({
 
   const [hasHydrated, setHasHydrated] = useState(false)
   const [input, setInput] = useState('')
+  const [inputMode, setInputMode] = useState<UserMessageKind>('speech')
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  const inputModeOptions: Array<{
+    value: UserMessageKind
+    label: string
+    description: string
+  }> = [
+    { value: 'speech', label: 'คำพูด', description: 'สิ่งที่ผู้ใช้พูดกับตัวละคร' },
+    { value: 'action', label: 'การกระทำ', description: 'สิ่งที่ผู้ใช้ทำจริงในฉาก' },
+    { value: 'narration', label: 'บรรยายฉาก', description: 'สิ่งที่กำลังเกิดขึ้นหรือข้อมูลเสริมของฉาก' },
+  ]
+
+  const modeAccentClasses: Record<UserMessageKind, string> = {
+    speech: 'border-sky-400/30 bg-sky-400/10 text-sky-100',
+    action: 'border-amber-400/30 bg-amber-400/10 text-amber-100',
+    narration: 'border-emerald-400/30 bg-emerald-400/10 text-emerald-100',
+  }
 
   // Handle hydration
   useEffect(() => {
@@ -56,6 +74,7 @@ export default function ChatPage({
     const userMessage: Message = {
       id: crypto.randomUUID(),
       role: 'user',
+      kind: inputMode,
       content: input.trim(),
     }
 
@@ -75,7 +94,10 @@ export default function ChatPage({
         }),
       })
 
-      if (!response.ok) throw new Error('Failed to fetch response')
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || `API Error (${response.status})`)
+      }
 
       const data = await response.json()
       
@@ -86,8 +108,19 @@ export default function ChatPage({
       }
       
       addMessageToSession(sessionId, aiMessage)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Chat error:', error)
+      // Show error as a system message so user knows what went wrong
+      const errorMessage: Message = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        content: JSON.stringify({
+          status: { date: '-', time: '-', location: '-', emotion: '❌', outfit: '-', desire: '-' },
+          story_flow: [{ type: 'action', text: `⚠️ เกิดข้อผิดพลาด: ${error.message || 'ไม่สามารถเชื่อมต่อ AI ได้'}\n\nลองตรวจสอบ API Key ในการตั้งค่า หรือเปลี่ยน Provider` }],
+          internal_thought: 'System Error'
+        }),
+      }
+      addMessageToSession(sessionId, errorMessage)
     } finally {
       setIsLoading(false)
     }
@@ -168,7 +201,7 @@ export default function ChatPage({
             <Sparkles size={12} className="text-white animate-pulse" />
             Story Engine Active
           </div>
-          <p className="text-[8px] text-zabb-muted-fg uppercase tracking-widest mr-2">{settings.model.split('/').pop()}</p>
+          <p className="text-[8px] text-zabb-muted-fg uppercase tracking-widest mr-2">{(settings.provider === 'google' ? settings.googleModel : settings.groqModel).split('/').pop()}</p>
         </div>
       </motion.header>
 
@@ -192,6 +225,7 @@ export default function ChatPage({
             const isUser = msg.role === 'user'
             const avatar = isUser ? session.userPersona.avatar : character.avatar
             const name = isUser ? session.userPersona.name : character.name
+            const userMessageKind = msg.role === 'user' ? (msg.kind ?? 'speech') : undefined
 
             return (
               <motion.div 
@@ -208,13 +242,18 @@ export default function ChatPage({
                     <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
                       {name}
                     </span>
+                    {isUser && userMessageKind && (
+                      <span className={`rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.2em] ${modeAccentClasses[userMessageKind]}`}>
+                        {inputModeOptions.find((option) => option.value === userMessageKind)?.label ?? 'คำพูด'}
+                      </span>
+                    )}
                   </div>
                   <div className={`p-4 md:p-6 rounded-[1.2rem] md:rounded-[1.5rem] shadow-2xl overflow-x-auto transition-all ${
                     isUser 
                     ? 'bg-white/[0.04] text-white/90 rounded-tr-none glass-border border-white/10' 
                     : 'bg-transparent border border-white/10 rounded-tl-none glass-border'
                   }`}>
-                    <MessageParser content={msg.content} role={msg.role} />
+                    <MessageParser content={msg.content} role={msg.role} messageKind={userMessageKind} />
                   </div>
                 </div>
               </motion.div>
@@ -249,6 +288,32 @@ export default function ChatPage({
         className="p-4 md:p-8 shrink-0 bg-gradient-to-t from-black via-black to-transparent chat-input-shadow z-20"
       >
         <div className="max-w-4xl mx-auto space-y-3 md:space-y-4">
+          <div className="flex flex-wrap items-center gap-2 px-1">
+            {inputModeOptions.map((option) => {
+              const isActive = inputMode === option.value
+              return (
+                <Button
+                  key={option.value}
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setInputMode(option.value)}
+                  className={`rounded-full border px-3 md:px-4 text-[10px] font-black uppercase tracking-[0.22em] transition-all ${
+                    isActive
+                      ? `${modeAccentClasses[option.value]} shadow-[0_0_30px_rgba(255,255,255,0.08)]`
+                      : 'border-white/10 bg-white/[0.03] text-white/45 hover:border-white/20 hover:text-white/70'
+                  }`}
+                  title={option.description}
+                >
+                  {option.label}
+                </Button>
+              )
+            })}
+            <span className="text-[10px] text-white/35 md:ml-2">
+              {inputModeOptions.find((option) => option.value === inputMode)?.description}
+            </span>
+          </div>
+
           {/* Action/Vibe Shortcuts */}
           <div className="flex gap-2 mb-1 md:mb-2 overflow-x-auto pb-1 no-scrollbar text-white">
             <Button 
@@ -310,7 +375,7 @@ export default function ChatPage({
             </Button>
           </div>
           <p className="text-center text-[8px] font-black text-white/5 uppercase tracking-[0.4em] mt-2 md:mt-4">
-            Zabb AI Engine V16.0 🌶️ Local Mode
+            Zabb AI Engine V16.1 🌶️ Local Mode
           </p>
         </div>
       </motion.div>

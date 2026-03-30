@@ -19,11 +19,22 @@ export interface UserPersona {
   avatar: string
 }
 
-export interface Message {
+export type UserMessageKind = 'speech' | 'action' | 'narration'
+
+export interface UserMessage {
   id: string
-  role: 'user' | 'assistant'
+  role: 'user'
+  kind?: UserMessageKind
   content: string
 }
+
+export interface AssistantMessage {
+  id: string
+  role: 'assistant'
+  content: string
+}
+
+export type Message = UserMessage | AssistantMessage
 
 export interface ChatSession {
   id: string
@@ -33,7 +44,11 @@ export interface ChatSession {
 }
 
 export interface AISettings {
-  model: string
+  provider: 'groq' | 'google'
+  groqKeys: string[]
+  googleKeys: string[]
+  groqModel: string
+  googleModel: string
   temperature: number
   maxTokens: number
 }
@@ -56,6 +71,8 @@ interface ZabbStore {
   deleteSession: (sessionId: string) => void
   
   updateSettings: (settings: Partial<AISettings>) => void
+  fetchConfig: () => Promise<void>
+  updateAIConfig: (config: Partial<AISettings>) => Promise<void>
 }
 
 export const useZabbStore = create<ZabbStore>()(
@@ -65,7 +82,11 @@ export const useZabbStore = create<ZabbStore>()(
       sessions: {},
       currentUserPersona: null,
       settings: {
-        model: 'moonshotai/kimi-k2-instruct-0905',
+        provider: 'groq',
+        groqKeys: [],
+        googleKeys: [],
+        groqModel: 'moonshotai/kimi-k2-instruct-0905',
+        googleModel: 'gemini-2.0-flash',
         temperature: 0.75,
         maxTokens: 3000,
       },
@@ -140,9 +161,39 @@ export const useZabbStore = create<ZabbStore>()(
           settings: { ...state.settings, ...newSettings }
         }))
       },
+
+      fetchConfig: async () => {
+        try {
+          const res = await fetch('/api/settings')
+          const config = await res.json()
+          set((state) => ({
+            settings: { ...state.settings, ...config }
+          }))
+        } catch (error) {
+          console.error('Failed to fetch AI config:', error)
+        }
+      },
+
+      updateAIConfig: async (config) => {
+        try {
+          const res = await fetch('/api/settings', {
+            method: 'POST',
+            body: JSON.stringify(config),
+          })
+          if (res.ok) {
+            const data = await res.json()
+            set((state) => ({
+              settings: { ...state.settings, ...data.config }
+            }))
+          }
+        } catch (error) {
+          console.error('Failed to update AI config:', error)
+        }
+      },
     }),
     {
       name: 'zabb-ai-storage',
     }
   )
 )
+

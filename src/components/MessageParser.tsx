@@ -5,6 +5,7 @@ import React from 'react'
 interface ParsedMessageProps {
   content: string
   role: 'user' | 'assistant'
+  messageKind?: 'speech' | 'action' | 'narration'
 }
 
 interface StructuredResponse {
@@ -40,10 +41,17 @@ function formatTextWithAsterisks(text: string) {
   })
 }
 
-export function MessageParser({ content, role }: ParsedMessageProps) {
+export function MessageParser({ content, role, messageKind = 'speech' }: ParsedMessageProps) {
   if (role === 'user') {
+    const userClassName =
+      messageKind === 'action'
+        ? 'text-white/80 italic'
+        : messageKind === 'narration'
+          ? 'text-white/70'
+          : 'text-zabb-fg'
+
     return (
-      <div className="text-zabb-fg whitespace-pre-wrap leading-relaxed">
+      <div className={`${userClassName} whitespace-pre-wrap leading-relaxed`}>
         {formatTextWithAsterisks(content)}
       </div>
     )
