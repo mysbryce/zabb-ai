@@ -85,7 +85,6 @@ export default function CreateCharacterPage() {
             label="รูปประจำตัว AI" 
             onUploadSuccess={handleUploadSuccess} 
             currentUrl={formData.avatar}
-            characterName={formData.name}
           />
 
           <div>

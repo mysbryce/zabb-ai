@@ -53,7 +53,8 @@
 ### Root Config
 - `next.config.ts`: Next.js configuration (includes image domain allowlists).
 - `package.json`: Dependency manifest and scripts (`dev`, `build`, `lint`).
-- `.env`: (Local only) Contains `GROQ_API_KEY`.
+- `ai-config.json`: (Local only) Stores AI providers (`Groq`, `Google`), fallback API keys, and model selections. Managed dynamically via the UI's Settings Modal.
+
 
 ---
 
